@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.List;
@@ -5,11 +6,10 @@ import java.util.List;
 public class Assassins{
     public static boolean findVal(int[] arr, int val){
 	for(int x : arr)
-	    if(x == val && x != 0)
+	    if(x == val)
 		return true;
 	return false;
     }
-
     public static void printArr(String[] players){
 	for(int i = 0; i < players.length; i++)
 	    System.out.println(players[i] + " -> ");
@@ -26,24 +26,22 @@ public class Assassins{
 	System.out.println("Type the names of the players.");
 	System.out.println("Type exit to quit.");
 	String name = s.next();
-	while(!name.equals("exit")){
+	while(!name.equals("exit")){ //get player list
 	    players[counter++] = name;
 	    name = s.next();
 	}
-	System.out.println(name.equals("exit"));
 	
 	//randomize---------------------------------------------------
 	int[] unused = new int[counter];
 	String[] randomized = new String[counter];
-	for(int i = 0; i < counter; i++)
+	for(int i = 0; i < counter; i++) //keep track of used indices
 	    unused[i] = i;
 	for(int i = 0; i < counter; i++){
 	    int temp = rand.nextInt(counter);
-	    while (!findVal(unused,temp))
+	    while (!findVal(unused,temp)) //make new randomized player list
 		temp = rand.nextInt(counter);
-	    System.out.println(counter);
-	    randomized[temp-1] = players[temp-1];
-	    unused[temp-1] = -1;
+	    randomized[temp] = players[i];
+	    unused[temp] = -1;
 	}
 	printArr(randomized);
     }
