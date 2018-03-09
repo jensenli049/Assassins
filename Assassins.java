@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.List;
+import java.util.Arrays;
 
 public class Assassins{
     public static boolean findVal(int[] arr, int val){
@@ -43,6 +43,25 @@ public class Assassins{
 	    randomized[temp] = players[i];
 	    unused[temp] = -1;
 	}
+	System.out.println("----------------------------");
 	printArr(randomized);
+
+	//stats----------------------------------------------------
+	String[] alphabetical = randomized;
+	Arrays.sort(alphabetical);
+	int[] kills = new int[alphabetical.length];
+	for(int i = 0; i < kills.length; i++)
+	    kills[i] = 0;
+	while(readline != null){
+	    String[] temp = line.split();
+	    if(temp[0].equals("Day"))
+		continue;
+	    for(int i = 0; i < alphabetical.length; i++)
+		if(alphabetical[i].equals(temp[0]))
+		    kills[i]++;
+	}
+	
     }
 }
+
+//Arrays.asList(yourArray).contains(yourValue);
