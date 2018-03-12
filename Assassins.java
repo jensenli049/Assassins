@@ -1,14 +1,16 @@
 import java.io.*;
+import java.lang.*;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.Arrays;
 
 public class Assassins{
-    String fileName = "temp.txt";
-    String line = null;
-    String[] survivors;
-    String[] sporkers;
-    int day = 0;
+    static String fileName = "Assassins_2018.txt";
+    static String divider = "==========================================================================="
+    static String line = null;
+    static String[] survivors;
+    static String[] sporkers;
+    static int day = 0;
     
     public static boolean findVal(int[] arr, int val){
 	for(int x : arr)
@@ -52,6 +54,32 @@ public class Assassins{
 	System.out.println("----------------------------");
 	printArr(randomized);
 
+	//log stuff
+	File file = new File(fileName);
+	file.createNewFile();
+
+	//read file
+	FileReader fileReader = new FileReader(fileName);
+	BufferedReader bufferedReader = new BufferedReader(fileReader);
+	int scount = 0;
+	while((line = bufferedReader.readLine()) != null){
+	    String[] temp = line.split(" ");
+	    if(temp[0].equals("Day"))
+		day = Integer.parseInt(temp[0])+1;
+	    else if(temp[0].equals("Survivors:")){
+		survivors = new String[temp.length-1];
+		System.arraycopy(temp, 1, survivors, 0, temp.length-1);
+	    }
+	    else if(temp[0].equals(divider))
+		continue;
+	    else{
+		sporkers = new String[randomized.length];
+		sporkers[scount++] = temp[0];
+	    }
+	}
+	bufferedReader.close();
+
+	
 	//stats----------------------------------------------------
 	String[] alphabetical = randomized;
 	Arrays.sort(alphabetical);
@@ -59,47 +87,23 @@ public class Assassins{
 	for(int i = 0; i < kills.length; i++)
 	    kills[i] = 0;
 	
-	while(readline != null){
-	    String[] temp = line.split();
-	    if(temp[0].equals("Day"))
-		continue;
-	    for(int i = 0; i < alphabetical.length; i++)
-		if(alphabetical[i].equals(temp[0]))
-		    kills[i]++;
-	}
 	
+	for(int i = 0; i < sporkers.length; i++)
+	    for(int j = 0; j < alphabetical.length; j++)
+		if(alphabetical[j].equals(sporkers[i]))
+		    kills[j]++;	
     }
 }
 
 //Arrays.asList(yourArray).contains(yourValue);
 
-//file stuff
-
-try {
-    FileReader fileReader = new FileReader(fileName);
-    BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-    while((line = bufferedReader.readLine()) != null){
-	String[] temp = line.split();
-	if(temp[0].equals("Day"))
-	    day = temp[0]++;
-        else if(temp[0].equals("Survivors:"))
-	    
-    }
-    bufferedReader.close();         
-}
-catch(FileNotFoundException ex)
-    System.out.println("Unable to open file '" + fileName + "'");                
-catch(IOException ex)
-    System.out.println("Error reading file '" + fileName + "'");
-
 
 /*
-Log.txt
-Day 4
-Remaining: a->b->c->
-j killed k
-l killed m
+  Log.txt
+  Day 4
+  Remaining: a->b->c->
+  j killed k
+  l killed m
 
-Day 3
+  Day 3
 */
