@@ -4,6 +4,12 @@ import java.util.Scanner;
 import java.util.Arrays;
 
 public class Assassins{
+    String fileName = "temp.txt";
+    String line = null;
+    String[] survivors;
+    String[] sporkers;
+    int day = 0;
+    
     public static boolean findVal(int[] arr, int val){
 	for(int x : arr)
 	    if(x == val)
@@ -52,6 +58,7 @@ public class Assassins{
 	int[] kills = new int[alphabetical.length];
 	for(int i = 0; i < kills.length; i++)
 	    kills[i] = 0;
+	
 	while(readline != null){
 	    String[] temp = line.split();
 	    if(temp[0].equals("Day"))
@@ -65,3 +72,34 @@ public class Assassins{
 }
 
 //Arrays.asList(yourArray).contains(yourValue);
+
+//file stuff
+
+try {
+    FileReader fileReader = new FileReader(fileName);
+    BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+    while((line = bufferedReader.readLine()) != null){
+	String[] temp = line.split();
+	if(temp[0].equals("Day"))
+	    day = temp[0]++;
+        else if(temp[0].equals("Survivors:"))
+	    
+    }
+    bufferedReader.close();         
+}
+catch(FileNotFoundException ex)
+    System.out.println("Unable to open file '" + fileName + "'");                
+catch(IOException ex)
+    System.out.println("Error reading file '" + fileName + "'");
+
+
+/*
+Log.txt
+Day 4
+Remaining: a->b->c->
+j killed k
+l killed m
+
+Day 3
+*/
