@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class Assassins{
     static String fileName = "Assassins_2018.txt";
-    static String divider = "==========================================================================="
+    static String divider = "===========================================================================";
     static String line = null;
     static String[] survivors;
     static String[] sporkers;
@@ -18,11 +18,26 @@ public class Assassins{
 		return true;
 	return false;
     }
+    
     public static void printArr(String[] players){
 	for(int i = 0; i < players.length; i++)
 	    System.out.println(players[i] + " -> ");
     }
 
+    public static int countOcc (String[] arr, String name) {
+	int n = 0;
+	for (int x = 0; x < arr.length; x++)
+	    if(arr[x].equals(name))
+		n++;
+    }
+    public static int indexOcc (String[] arr, String name) {
+	int n = 0;
+	for (int x = 0; x < arr.length; x++)
+	    if(arr[x].equals(name)){
+		n = x;
+		break;
+	    }
+    }
     public static void main(String [] args){
 	int counter = 0;
 	String[] players = new String[100];
@@ -53,7 +68,22 @@ public class Assassins{
 	}
 	System.out.println("----------------------------");
 	printArr(randomized);
-
+	
+	//get forked---------------------------------------------------
+	counter = 0;
+	System.out.println("Type the names of the assassin.");
+	System.out.println("Type exit to quit.");
+	name = s.next();
+	while(!name.equals("exit")){ //get player list
+	    if(!Arrays.asList(survivors).contains(name)){
+		System.out.println("Name doesn't exist, try again.");
+		printArr(survivors);
+	    }
+	    line += name + " killed " + survivors[(indexOcc(name)+1)%survivors.length] + "\n";
+	    counter++;
+	    name = s.next();
+	}
+	
 	//log stuff
 	File file = new File(fileName);
 	file.createNewFile();
