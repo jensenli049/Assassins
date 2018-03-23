@@ -21,7 +21,7 @@ public class Assassins{
     
     public static void printArr(String[] players){
 	for(int i = 0; i < players.length; i++)
-	    System.out.println(players[i] + " -> ");
+	    System.out.println(players[i] + "->");
     }
 
     public static int countOcc (String[] arr, String name) {
@@ -29,6 +29,7 @@ public class Assassins{
 	for (int x = 0; x < arr.length; x++)
 	    if(arr[x].equals(name))
 		n++;
+	return n;
     }
     public static int indexOcc (String[] arr, String name) {
 	int n = 0;
@@ -37,6 +38,7 @@ public class Assassins{
 		n = x;
 		break;
 	    }
+	return n;
     }
     public static void main(String [] args){
 	int counter = 0;
@@ -79,36 +81,51 @@ public class Assassins{
 		System.out.println("Name doesn't exist, try again.");
 		printArr(survivors);
 	    }
-	    line += name + " killed " + survivors[(indexOcc(name)+1)%survivors.length] + "\n";
+	    line += name + " killed " + survivors[(indexOcc(survivors,name)+1)%survivors.length] + "\n";
 	    counter++;
 	    name = s.next();
 	}
 	
 	//log stuff
-	File file = new File(fileName);
-	file.createNewFile();
-
+	try{
+	    File file = new File(fileName);
+	    file.createNewFile();
+	}
+	catch(IOException e){
+	    e.printStackTrace();
+	}
+	
 	//read file
-	FileReader fileReader = new FileReader(fileName);
+	FileReader fileReader = null;
+	try{
+	    fileReader = new FileReader(fileName);
+	}
+	catch (FileNotFoundException ex){
+	    System.out.println("Can't find " + fileName);
+	}
 	BufferedReader bufferedReader = new BufferedReader(fileReader);
 	int scount = 0;
-	while((line = bufferedReader.readLine()) != null){
-	    String[] temp = line.split(" ");
-	    if(temp[0].equals("Day"))
-		day = Integer.parseInt(temp[0])+1;
-	    else if(temp[0].equals("Survivors:")){
-		survivors = new String[temp.length-1];
-		System.arraycopy(temp, 1, survivors, 0, temp.length-1);
+	try{
+	    while((line = bufferedReader.readLine()) != null){
+		String[] temp = line.split(" ");
+		if(temp[0].equals("Day"))
+		    day = Integer.parseInt(temp[0])+1;
+		else if(temp[0].equals("Survivors:")){
+		    survivors = new String[temp.length-1];
+		    System.arraycopy(temp, 1, survivors, 0, temp.length-1);
+		}
+		else if(temp[0].equals(divider))
+		    continue;
+		else{
+		    sporkers = new String[randomized.length];
+		    sporkers[scount++] = temp[0];
+		}
 	    }
-	    else if(temp[0].equals(divider))
-		continue;
-	    else{
-		sporkers = new String[randomized.length];
-		sporkers[scount++] = temp[0];
-	    }
+	    bufferedReader.close();
 	}
-	bufferedReader.close();
-
+	catch (IOException e) {
+	    System.out.println("Nothing happened");
+        }
 	
 	//stats----------------------------------------------------
 	String[] alphabetical = randomized;
